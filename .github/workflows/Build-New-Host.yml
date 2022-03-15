@@ -1,0 +1,22 @@
+name: Build New Host
+
+on:
+  push:
+    branches: [ _deploy_ ]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Environment
+      uses: appleboy/ssh-action@master
+      with:
+        host: 3.120.79.153
+        username: ubuntu
+        key: ${{ secrets.PADMA }}
+        command_timeout: 5m
+        script: |
+          curl https://raw.githubusercontent.com/Lotus-King-Research/Padma-Dictionary-Service-Infra/master/build.sh > build.sh
+          chmod +x ./build.sh
+          ./build.sh ${{ secrets.MIKKOKOTILA_TOKEN }}
